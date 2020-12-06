@@ -1,5 +1,7 @@
-const fs = require("fs");
-const path = require("path");
+import fs from "fs";
+import path from "path";
+import { fileURLToPath } from "url";
+const __dirname = path.dirname(fileURLToPath(import.meta.url));
 
 function countPasswords(file, fn) {
   const lines = parseFile(file);
@@ -59,7 +61,7 @@ function isValidTwo({ min, max, char, password }) {
   return [pos1, pos2].filter((ans) => ans === true).length === 1;
 }
 
-module.exports = {
+export default {
   parseLine,
   isValid,
   parseFile,

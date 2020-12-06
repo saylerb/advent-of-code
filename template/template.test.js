@@ -1,4 +1,4 @@
-const template = require("./template.js");
+import template from "./template.js";
 
 test("test 1", () => {
   expect(template.part1()).toBeUndefined();

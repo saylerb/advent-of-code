@@ -1,4 +1,4 @@
-const day5 = require("./day5.js");
+import day5 from "./day5.js";
 
 test("Giving one instruction with current min and max", () => {
   expect(day5.nextMinMax(0, 127, "F")).toEqual([0, 63]);

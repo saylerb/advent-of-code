@@ -1,4 +1,4 @@
-function findTwo(numbers) {
+export function findTwo(numbers) {
   let answer;
   let indexA = 0;
   let numberA = numbers[indexA];
@@ -9,7 +9,6 @@ function findTwo(numbers) {
       numberB = numbers[indexB];
 
       for (let indexC = 0; indexC < numbers.length - 1; indexC++) {
-        numberC = numbers[indexC];
         // console.log("A: ", numberA, "B: ", numberB);
 
         if (numberA + numberB === 2020) {
@@ -37,7 +36,7 @@ function findTwo(numbers) {
   }
 }
 
-function findThree(numbers) {
+export function findThree(numbers) {
   // console.log("starting..");
 
   let answer;
@@ -72,7 +71,3 @@ function findThree(numbers) {
   return answer;
 }
 
-module.exports = {
-  findTwo,
-  findThree,
-};

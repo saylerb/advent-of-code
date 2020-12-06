@@ -2,9 +2,9 @@
   "name": "advent-of-code",
   "version": "1.0.0",
   "description": "",
-  "main": "day1.js",
+  "type": "module",
   "scripts": {
-    "test": "jest"
+    "test": "node --experimental-vm-modules node_modules/.bin/jest"
   },
   "keywords": [],
   "author": "",

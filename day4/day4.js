@@ -1,5 +1,7 @@
-const fs = require("fs");
-const path = require("path");
+import fs from "fs";
+import path from "path";
+import { fileURLToPath } from "url";
+const __dirname = path.dirname(fileURLToPath(import.meta.url));
 
 function parseFile(filename) {
   let data;
@@ -141,7 +143,7 @@ function validHair(hair) {
   return /\w{6}/.test(letters);
 }
 
-module.exports = {
+export default {
   main,
   parseFile,
   transformPassport,

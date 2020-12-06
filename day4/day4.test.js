@@ -1,4 +1,4 @@
-const day4 = require("./day4.js");
+import day4 from "./day4.js";
 
 test("can parse the file of passports into an array of strings without new lines", () => {
   const result = day4.parseFile("./test.txt");

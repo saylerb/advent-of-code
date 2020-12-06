@@ -1,4 +1,4 @@
-const day3 = require("./day3.js");
+import day3 from "./day3.js";
 
 describe("part 1", () => {
   test("returns first value in the graph", () => {

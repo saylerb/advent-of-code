@@ -1,5 +1,7 @@
-const fs = require("fs");
-const path = require("path");
+import fs from "fs";
+import path from "path";
+import { fileURLToPath } from "url";
+const __dirname = path.dirname(fileURLToPath(import.meta.url));
 
 function getCol(code) {
   return code.substring(code.length - 3);
@@ -120,7 +122,7 @@ function parseFile(filename) {
   return rows;
 }
 
-module.exports = {
+export default {
   part1,
   getSeatInfo,
   part2,

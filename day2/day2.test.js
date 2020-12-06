@@ -1,5 +1,5 @@
-const day2 = require("./day2.js");
-const fs = require("fs");
+import day2 from "./day2.js";
+import fs from "fs";
 
 test("can parse a single line into three parts", () => {
   const line = "1-3 a: abcde";
