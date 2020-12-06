@@ -70,4 +70,3 @@ export function findThree(numbers) {
   }
   return answer;
 }
-
