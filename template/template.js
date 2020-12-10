@@ -3,11 +3,11 @@ import path from "path";
 import { fileURLToPath } from "url";
 const __dirname = path.dirname(fileURLToPath(import.meta.url));
 
-function part1() {}
+export function part1() {}
 
-function part2() {}
+export function part2() {}
 
-function parseFile(filename) {
+export function parseFile(filename) {
   let data;
   let rows;
 
@@ -20,9 +20,3 @@ function parseFile(filename) {
 
   return rows;
 }
-
-export default {
-  part1,
-  part2,
-  parseFile,
-};
