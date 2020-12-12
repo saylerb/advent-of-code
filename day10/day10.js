@@ -13,14 +13,69 @@ export function part1(fileName) {
   return totalOnes * totalThrees;
 }
 
-export function part2() {}
+export function getLengthsOfGroupsOfContiguousNumbers(numbers) {
+  const sorted = sort(numbers);
+
+  const diffs = sorted.map((num, index, array) => {
+    if (index === 0) {
+      return;
+    }
+
+    return num - array[index - 1];
+  });
+
+  let currentCount = 1; // total diffs is 1 less than total numbers
+  let counts = [];
+
+  for (let i = 0; i < diffs.length; i++) {
+    const current = diffs[i];
+
+    if (current === 1) {
+      currentCount++;
+    } else {
+      counts = counts.concat(currentCount);
+      currentCount = 1;
+    }
+
+    if (i === diffs.length - 1) {
+      counts = counts.concat(currentCount);
+    }
+  }
+
+  return counts.filter((count) => count > 1);
+}
+
+export function part2(fileName) {
+  const lines = parseFile(fileName);
+
+  const numbers = linesToNumbers(lines);
+  const withLeadingZero = [0, ...numbers];
+
+  const lengths = getLengthsOfGroupsOfContiguousNumbers(withLeadingZero);
+
+  return getNumberOfArrangements(lengths);
+}
+
+export function getNumberOfArrangements(groups) {
+  return groups.reduce((acc, num) => {
+    const tribMap = {
+      2: 1,
+      3: 2,
+      4: 4,
+      5: 7,
+      6: 13,
+    };
+    acc = acc * tribMap[num];
+    return acc;
+  }, 1);
+}
 
 export function getDifferences(numbers) {
-  const sorted = sort(numbers);
+  let sorted = sort(numbers);
   const max = sorted[sorted.length - 1];
-  const buildInJoltage = max + 3;
+  sorted = sorted.concat(max + 3); // built-in always 3 higher than max
 
-  let totals = { 1: 0, 2: 0, 3: 1 }; // built-in always 3 higher than max
+  let totals = { 1: 0, 2: 0, 3: 0 };
 
   let prevJoltageRating = 0;
 
