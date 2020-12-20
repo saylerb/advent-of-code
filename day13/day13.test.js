@@ -129,38 +129,38 @@ describe("part 2", () => {
   });
 
   test("find the next possible number by comparing all multiples of first number", () => {
-    // expect(
-    //   findMagicTimeBruteForce([
-    //     [17, 0],
-    //     [13, 2],
-    //     [19, 3],
-    //   ])
-    // ).toEqual(3417);
-    // expect(
-    //   findMagicTimeBruteForce([
-    //     [67, 0],
-    //     [7, 1],
-    //     [59, 2],
-    //     [61, 3],
-    //   ])
-    // ).toEqual(754018);
-    // expect(
-    //   findMagicTimeBruteForce([
-    //     [67, 0],
-    //     [7, 2],
-    //     [59, 3],
-    //     [61, 4],
-    //   ])
-    // ).toEqual(779210);
-    //1789,37,47,1889
-    // expect(
-    //   findMagicTimeBruteForce([
-    //     [1789, 0],
-    //     [37, 1],
-    //     [47, 2],
-    //     [1889, 3],
-    //   ])
-    // ).toEqual(1202161486);
+    expect(
+      findMagicTimeBruteForce([
+        [17, 0],
+        [13, 2],
+        [19, 3],
+      ])
+    ).toEqual(3417);
+    expect(
+      findMagicTimeBruteForce([
+        [67, 0],
+        [7, 1],
+        [59, 2],
+        [61, 3],
+      ])
+    ).toEqual(754018);
+    expect(
+      findMagicTimeBruteForce([
+        [67, 0],
+        [7, 2],
+        [59, 3],
+        [61, 4],
+      ])
+    ).toEqual(779210);
+    1789, 37, 47, 1889;
+    expect(
+      findMagicTimeBruteForce([
+        [1789, 0],
+        [37, 1],
+        [47, 2],
+        [1889, 3],
+      ])
+    ).toEqual(1202161486);
   });
 
   test("can find moduli and remainders for the chinese remainder theorem", () => {

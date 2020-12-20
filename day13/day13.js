@@ -67,12 +67,11 @@ export function allPairsMatch(pairs, currentTime) {
 }
 
 export function findMagicTimeBruteForce(pairs) {
-  let time = 99999999999992;
+  let time = 0;
 
   let found;
 
-  //&& time < 100_000_000_000_000
-  while (typeof found === "undefined") {
+  while (typeof found === "undefined" && time < 100_000_000_000_000) {
     const allWork = allPairsMatch(pairs, time);
 
     if (allWork) {
