@@ -11,7 +11,98 @@ export function part1(fileName) {
     .reduce((acc, value) => acc + value, 0);
 }
 
-export function part2() {}
+export function getValidTickets(rules, tickets) {
+  return tickets.filter(
+    (ticket) => getInvalidTicketValues(rules, ticket).length === 0
+  );
+}
+
+export function matchValuesToField(rules, tickets) {
+  const indexMap = tickets
+    .map((ticket) => ticket.split(","))
+    .reduce((acc, ticketValues, index) => {
+      ticketValues.forEach((value, index) => {
+        if (typeof acc[index] === "undefined") {
+          acc[index] = [value];
+        } else {
+          acc[index] = acc[index].concat(value);
+        }
+      });
+      return acc;
+    }, {});
+
+  const indexesAndPassedRules = Object.keys(indexMap).map((index) => {
+    const values = indexMap[index];
+
+    const passedRules = rules
+      .map((rule) => {
+        const allPass = values.every((value) => {
+          return isTicketValueForRule(rule, value);
+        });
+
+        return { rule, allPass };
+      })
+      .filter(({ allPass }) => allPass)
+      .map(({ rule }) => rule);
+
+    return { index, passedRules };
+  });
+
+  const sorted = indexesAndPassedRules.sort((a, b) => {
+    return a.passedRules.length - b.passedRules.length;
+  });
+
+  const result = [];
+
+  sorted.forEach(({ index, passedRules }) => {
+    const passedRuleNames = passedRules.map((rule) => rule.split(":")[0]);
+
+    if (passedRules.length === 1) {
+      result.push({ index, field: passedRuleNames[0] });
+    }
+
+    if (passedRules.length > 1) {
+      const remainingRules = passedRuleNames.filter((passedRule) => {
+        return !result.map(({ field }) => field).includes(passedRule);
+      });
+
+      result.push({ index, field: remainingRules[0] });
+    }
+  });
+
+  return result.reduce((acc, { field, index }) => {
+    acc[index] = field;
+    return acc;
+  }, {});
+}
+
+export function part2(fileName, processFunction = (fields) => fields) {
+  const { rules, nearbyTickets, yourTicket } = getNotes(fileName);
+
+  const validTickets = getValidTickets(rules, nearbyTickets);
+
+  const results = matchValuesToField(rules, validTickets);
+
+  const fields = yourTicket.split(",").reduce((acc, ticketValue, index) => {
+    const field = results[index];
+
+    acc[field] = ticketValue;
+    return acc;
+  }, {});
+
+  return processFunction(fields);
+}
+
+export function sumFieldsStartingWithDeparture(fields) {
+  const keysWithDeparture = Object.keys(fields).filter((key) =>
+    key.includes("departure")
+  );
+
+  return keysWithDeparture.reduce((acc, key) => {
+    const num = fields[key];
+    return acc * parseInt(num);
+  }, 1);
+}
 
 export function getNotes(fileName) {
   const [rulesPart, yourTicketPart, nearbyTicketsPart] = parseFile(
