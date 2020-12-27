@@ -1,17 +1,12 @@
-import {
-  part1,
-  part2,
-  parseFile,
-  getSurroundingCubeCoords,
-  Cube,
-  Point,
-  createPocketDimension,
-} from "./day17.js";
+import { part1, part2, parseFile } from "./day17.js";
+import { PocketDimension } from "./PocketDimension";
+import { Cube } from "./Cube";
+import { Point } from "./Point";
 
 describe("part 1", () => {
   test("can get a list of coordinates of surrounding cubes", () => {
     // Should be 26 total "cubes"
-    const result = getSurroundingCubeCoords({ x: 0, y: 0, z: 0 });
+    const result = PocketDimension.getSurroundingPoints({ x: 0, y: 0, z: 0 });
     expect(result.length).toEqual(26);
     expect(result).not.toEqual(
       expect.arrayContaining([
@@ -68,7 +63,7 @@ describe("part 1", () => {
   test("create initial cubes from input", () => {
     const initalState = [".#.", "..#", "###"];
 
-    const pocket = createPocketDimension(initalState);
+    const pocket = PocketDimension.create(initalState);
 
     expect(pocket.totalCubes()).toEqual(9);
     expect(pocket.totalActive()).toEqual(5);
@@ -88,12 +83,10 @@ describe("part 1", () => {
     expect(pocket.getCubeAtPoint(new Point({ x: 10, y: 10, z: 10 }))).toEqual(
       undefined
     );
-
-    expect(pocket.printCubeArray()).toEqual(initalState);
   });
 
   test("can get all the surround cubes for a specific point", () => {
-    const pocket = createPocketDimension([".#.", "..#", "###"]);
+    const pocket = PocketDimension.create([".#.", "..#", "###"]);
 
     const { tracked, untracked } = pocket.getSurroundingCubes(
       new Point({ x: 0, y: 0, z: 0 })
@@ -103,7 +96,7 @@ describe("part 1", () => {
   });
 
   test("can run the rules against initial state", () => {
-    const pocket = createPocketDimension([".#.", "..#", "###"]);
+    const pocket = PocketDimension.create([".#.", "..#", "###"]);
 
     pocket.next();
     expect(pocket.totalActive()).toEqual(11);
@@ -121,7 +114,7 @@ describe("part 1", () => {
   });
 
   test("can run rules against input", () => {
-    const pocket = createPocketDimension([".#.", "..#", "###"]);
+    const pocket = PocketDimension.create([".#.", "..#", "###"]);
 
     pocket.next();
     expect(pocket.totalActive()).toEqual(11);
