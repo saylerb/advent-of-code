@@ -3,8 +3,12 @@ import { Point } from "./Point";
 
 export class PocketDimension {
   constructor(cubes, dimensions) {
-    this._cubeMap = this.createCubeMap(cubes);
+    this.cubeMap = this.createCubeMap(cubes);
     this.dimensions = dimensions;
+  }
+
+  set cubeMap(map) {
+    this._cubeMap = map;
   }
 
   get cubeMap() {
@@ -12,13 +16,13 @@ export class PocketDimension {
   }
 
   createCubeMap(inputCubes) {
-    const theMap = new Map();
+    const map = new Map();
 
     inputCubes.forEach((cube) => {
-      theMap.set(JSON.stringify(cube.point), cube);
+      map.set(JSON.stringify(cube.point), cube);
     });
 
-    return theMap;
+    return map;
   }
 
   nextCubeState(trackedCubes, cube) {
@@ -56,7 +60,7 @@ export class PocketDimension {
     const untrackedMap = new Map();
     // first go through each cube and gather untracked cubes
 
-    for (let [serializedPoint, trackedCube] of this._cubeMap) {
+    for (let [serializedPoint, trackedCube] of this.cubeMap) {
       const { tracked, untracked } = this.getSurroundingCubes(
         trackedCube.point
       );
@@ -81,20 +85,20 @@ export class PocketDimension {
       newTrackedMap.set(serializedPoint, nextCube);
     }
 
-    this._cubeMap = newTrackedMap;
+    this.cubeMap = newTrackedMap;
   }
 
   getCubeAtPoint(point) {
-    return this._cubeMap.get(JSON.stringify(point));
+    return this.cubeMap.get(JSON.stringify(point));
   }
 
   totalCubes() {
-    return this._cubeMap.size;
+    return this.cubeMap.size;
   }
 
   totalActive() {
     let total = 0;
-    for (const [_, value] of this._cubeMap) {
+    for (const [_, value] of this.cubeMap) {
       if (value.active) [total++];
     }
 
@@ -103,7 +107,7 @@ export class PocketDimension {
 
   totalInactive() {
     let total = 0;
-    for (const [_, value] of this._cubeMap) {
+    for (const [_, value] of this.cubeMap) {
       if (!value.active) [total++];
     }
 
