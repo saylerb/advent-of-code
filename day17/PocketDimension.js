@@ -2,8 +2,9 @@ import { Cube } from "./Cube";
 import { Point } from "./Point";
 
 export class PocketDimension {
-  constructor(cubes) {
+  constructor(cubes, dimensions) {
     this._cubeMap = this.createCubeMap(cubes);
+    this.dimensions = dimensions;
   }
 
   get cubeMap() {
@@ -110,13 +111,20 @@ export class PocketDimension {
   }
 
   getSurroundingCubes(point) {
-    const points = PocketDimension.getSurroundingPoints(point);
+    let lookupFn;
+
+    if (this.dimensions === 4) {
+      lookupFn = PocketDimension.getSurroundingPoints4d;
+    } else {
+      lookupFn = PocketDimension.getSurroundingPoints;
+    }
+    const points = lookupFn(point);
 
     const tracked = [];
     const untracked = [];
 
-    points.forEach(({ x, y, z }) => {
-      const point = new Point({ x, y, z });
+    points.forEach(({ x, y, z, w }) => {
+      const point = new Point({ x, y, z, w });
 
       const searchResult = this.getCubeAtPoint(point);
 
@@ -130,17 +138,25 @@ export class PocketDimension {
     return { tracked, untracked };
   }
 
-  static create(lines) {
+  static create(lines, dimensions = 3) {
     const cubes = lines.flatMap((row, y) => {
       return row.split("").map((xValue, x) => {
+        let point;
+
+        if (dimensions === 3) {
+          point = new Point({ x, y, z: 0 });
+        } else {
+          point = new Point({ x, y, z: 0, w: 0 });
+        }
+
         return new Cube({
-          point: new Point({ x, y, z: 0 }),
+          point,
           active: xValue === "#",
         });
       });
     });
 
-    return new PocketDimension(cubes);
+    return new PocketDimension(cubes, dimensions);
   }
 
   static getSurroundingPoints({ x, y, z }) {
@@ -151,6 +167,25 @@ export class PocketDimension {
           const isCurrentCube = newX === x && newY === y && newZ === z;
           if (!isCurrentCube) {
             result.push(new Point({ x: newX, y: newY, z: newZ }));
+          }
+        }
+      }
+    }
+
+    return result;
+  }
+
+  static getSurroundingPoints4d({ x, y, z, w }) {
+    const result = [];
+    for (let newX = x - 1; newX <= x + 1; newX++) {
+      for (let newY = y - 1; newY <= y + 1; newY++) {
+        for (let newZ = z - 1; newZ <= z + 1; newZ++) {
+          for (let newW = w - 1; newW <= w + 1; newW++) {
+            const isCurrentCube =
+              newX === x && newY === y && newZ === z && newW === w;
+            if (!isCurrentCube) {
+              result.push(new Point({ x: newX, y: newY, z: newZ, w: newW }));
+            }
           }
         }
       }

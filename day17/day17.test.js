@@ -143,7 +143,53 @@ describe("part 1", () => {
 });
 
 describe("part 2", () => {
-  test("test part 2", () => {
-    expect(part2()).toBeUndefined();
+  test("can get a list of coordinates of surrounding cubes in 4 dimensions", () => {
+    // Should be 80 total "cubes"
+    const result = PocketDimension.getSurroundingPoints4d({
+      x: 0,
+      y: 0,
+      z: 0,
+      w: 0,
+    });
+    expect(result.length).toEqual(80);
+    expect(result).not.toEqual(
+      expect.arrayContaining([
+        {
+          x: 0,
+          y: 0,
+          z: 0,
+          w: 0,
+        },
+      ])
+    );
+
+    expect(result).toEqual(
+      expect.arrayContaining([{ x: 1, y: 1, z: 0, w: -1 }])
+    );
+  });
+
+  test("can create a pocket dimension with 4 dimensions", () => {
+    const init = [".#.", "..#", "###"];
+
+    const pocket = PocketDimension.create(init, 4);
+
+    pocket.next();
+    expect(pocket.totalActive()).toEqual(29);
+
+    pocket.next();
+    expect(pocket.totalActive()).toEqual(60);
+
+    // pocket.next();
+    // pocket.next();
+    // pocket.next();
+    // pocket.next();
+    // expect(pocket.totalActive()).toEqual(848);
+  });
+  test.skip("test part 2", () => {
+    expect(part2("test.txt")).toEqual(848);
+  });
+
+  test.skip("test part 2", () => {
+    expect(part2("day17input.txt")).toEqual(1380);
   });
 });

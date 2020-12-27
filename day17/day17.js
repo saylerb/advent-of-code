@@ -8,7 +8,7 @@ import { PocketDimension } from "./PocketDimension";
 export function part1(fileName) {
   const lines = parseFile(fileName);
 
-  const pocket = PocketDimension.create(lines);
+  const pocket = PocketDimension.create(lines, 3);
 
   for (let i = 0; i < 6; i++) {
     pocket.next();
@@ -17,7 +17,17 @@ export function part1(fileName) {
   return pocket.totalActive();
 }
 
-export function part2() {}
+export function part2(fileName) {
+  const lines = parseFile(fileName);
+
+  const pocket = PocketDimension.create(lines, 4);
+
+  for (let i = 0; i < 6; i++) {
+    pocket.next();
+  }
+
+  return pocket.totalActive();
+}
 
 export function parseFile(filename) {
   let data;
