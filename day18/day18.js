@@ -5,10 +5,36 @@ const __dirname = path.dirname(fileURLToPath(import.meta.url));
 
 export function calculateLine(text) {
   if (text.indexOf("(") === -1) {
-    return reduceNextParens(text);
+    return calculate(text);
   } else {
-    return calculateLine(reduceNextParens(text));
+    return calculateLine(reduceNextParens(text, calculate));
   }
+}
+
+export function calculateLinePartTwo(text) {
+  if (text.indexOf("(") === -1) {
+    return reduceAddition(text);
+  } else {
+    return calculateLinePartTwo(reduceNextParens(text, reduceAddition));
+  }
+}
+
+export function reduceAddition(text) {
+  if (typeof text === "number") {
+    return text;
+  }
+
+  const countOfAdditions = (text.match(/\+/g) || []).length;
+  if (countOfAdditions === 0) {
+    return calculate(text);
+  }
+  const matches = [...text.matchAll(/\d+\s\+\s\d+/g)];
+
+  const firstMatch = matches[0][0];
+
+  const replaced = text.replace(firstMatch, calculate(firstMatch));
+
+  return reduceAddition(replaced);
 }
 
 export function calculate(text) {
@@ -43,7 +69,13 @@ export function part1(fileName) {
     .reduce((acc, num) => acc + num, 0);
 }
 
-export function part2() {}
+export function part2(fileName) {
+  const lines = parseFile(fileName);
+
+  return lines
+    .map((line) => calculateLinePartTwo(line))
+    .reduce((acc, num) => acc + num, 0);
+}
 
 export function parseFile(filename) {
   let data;
@@ -59,14 +91,15 @@ export function parseFile(filename) {
   return rows;
 }
 
-export function reduceNextParens(text) {
+export function reduceNextParens(text, calcFn = calculate) {
   const index = text.indexOf("(");
 
   if (index === -1) {
     // Base case. If no parentheses exist, evaluate
-    return calculate(text);
+    return calcFn(text);
   }
 
+  // regex might only support 1 level of nested parentheses
   const matches = [...text.matchAll(/\(([^\)|^\(]+)\)/g)];
 
   if (matches.length === 0) {
@@ -74,10 +107,12 @@ export function reduceNextParens(text) {
   } else {
     // replace all instances of parentheses with reduced value
 
-    return matches.reduce((acc, match) => {
+    const result = matches.reduce((acc, match) => {
       const [withParens, betweenParens] = match;
 
-      return acc.replace(withParens, reduceNextParens(betweenParens));
+      return acc.replace(withParens, reduceNextParens(betweenParens, calcFn));
     }, text);
+
+    return result;
   }
 }
