@@ -1,6 +1,6 @@
 import { part1, part2, parseFile, isMatchForRule } from "./day19.js";
 
-describe("part 1", () => {
+describe.skip("part 1", () => {
   test("can tell if a simple character match", () => {
     expect(isMatchForRule({ 1: [["a"]] }, 1, "a")).toBe(true);
     expect(isMatchForRule({ 1: [["a"]] }, 1, "b")).toBe(false);
@@ -17,7 +17,7 @@ describe("part 1", () => {
     );
   });
 
-  test.only("can handle 3 non-conditional branches to other rules", () => {
+  test("can handle 3 non-conditional branches to other rules", () => {
     const rules = {
       0: [["2", "1", "3"]],
       1: [
@@ -145,7 +145,7 @@ describe("part 1", () => {
   });
 });
 
-describe("part 2", () => {
+describe.skip("part 2", () => {
   test("test part 2", () => {
     expect(part2()).toBeUndefined();
   });

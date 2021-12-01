@@ -1,7 +1,7 @@
 import { part1, part2, parseFile, isMatchForRule } from "./day19.js";
 
-describe("part 1", () => {
-  test.only("can handle 3 non-conditional branches to other rules", () => {
+describe.skip("part 1", () => {
+  test("can handle 3 non-conditional branches to other rules", () => {
     const rules = {
       0: [["2", "1", "3"]],
       1: [
