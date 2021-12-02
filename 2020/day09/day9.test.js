@@ -25,26 +25,8 @@ test("find two numbers in a list that add up to another number", () => {
 
 test("find the first invalid number in a list given a preamble size", () => {
   const list = [
-    35,
-    20,
-    15,
-    25,
-    47,
-    40,
-    62,
-    55,
-    65,
-    95,
-    102,
-    117,
-    150,
-    182,
-    127,
-    219,
-    299,
-    277,
-    309,
-    576,
+    35, 20, 15, 25, 47, 40, 62, 55, 65, 95, 102, 117, 150, 182, 127, 219, 299,
+    277, 309, 576,
   ];
 
   const preambleSize = 5;
@@ -58,26 +40,8 @@ test("test part 1 works", () => {
 
 test("find contiguous numbers that add to sum", () => {
   const list = [
-    35,
-    20,
-    15,
-    25,
-    47,
-    40,
-    62,
-    55,
-    65,
-    95,
-    102,
-    117,
-    150,
-    182,
-    127,
-    219,
-    299,
-    277,
-    309,
-    576,
+    35, 20, 15, 25, 47, 40, 62, 55, 65, 95, 102, 117, 150, 182, 127, 219, 299,
+    277, 309, 576,
   ];
 
   expect(getContiguousNumbers(list, 127)).toEqual([15, 25, 47, 40]);

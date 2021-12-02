@@ -43,8 +43,7 @@ describe("part 2", () => {
     // has a group of 2 contiguous numbers (0, 1) and a group of 3 (4,5,6)
 
     expect(getLengthsOfGroupsOfContiguousNumbers([0, 1, 4, 5, 6, 10])).toEqual([
-      2,
-      3,
+      2, 3,
     ]);
 
     // 1, 4, 5, 6, 7, 10, 11, 12, 15, 16, 19
@@ -55,18 +54,7 @@ describe("part 2", () => {
 
     expect(
       getLengthsOfGroupsOfContiguousNumbers([
-        0,
-        1,
-        4,
-        5,
-        6,
-        7,
-        10,
-        11,
-        12,
-        15,
-        16,
-        19,
+        0, 1, 4, 5, 6, 7, 10, 11, 12, 15, 16, 19,
       ])
     ).toEqual([2, 4, 3, 2]);
 
@@ -83,38 +71,8 @@ describe("part 2", () => {
 
     expect(
       getLengthsOfGroupsOfContiguousNumbers([
-        0,
-        1,
-        2,
-        3,
-        4,
-        7,
-        8,
-        9,
-        10,
-        11,
-        14,
-        17,
-        18,
-        19,
-        20,
-        23,
-        24,
-        25,
-        28,
-        31,
-        32,
-        33,
-        34,
-        35,
-        38,
-        39,
-        42,
-        45,
-        46,
-        47,
-        48,
-        49,
+        0, 1, 2, 3, 4, 7, 8, 9, 10, 11, 14, 17, 18, 19, 20, 23, 24, 25, 28, 31,
+        32, 33, 34, 35, 38, 39, 42, 45, 46, 47, 48, 49,
       ])
     ).toEqual([5, 5, 4, 3, 5, 2, 5]);
   });
