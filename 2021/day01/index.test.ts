@@ -1,6 +1,6 @@
-import { countIncreases, processDepths } from "./index";
+import { countIncreases, processDepths, getWindowSums } from "./index";
 
-describe("increase count", () => {
+describe("part 1", () => {
   test("is zero when when depth array is empty", () => {
     expect(countIncreases([])).toBe(0);
   });
@@ -23,5 +23,17 @@ describe("increase count", () => {
     expect(processDepths("input.txt")).toEqual([
       199, 200, 208, 210, 200, 207, 240, 269, 260, 263,
     ]);
+  });
+});
+
+describe("part 2", () => {
+  test("calculates the 3 measurement windows sums", () => {
+    const depths = [199, 200, 208, 210, 200, 207, 240, 269, 260, 263];
+
+    const expectedSums = [607, 618, 618, 617, 647, 716, 769, 792];
+
+    const result = getWindowSums(depths);
+
+    expect(result).toEqual(expectedSums);
   });
 });
