@@ -15,7 +15,7 @@ interface PowerConsumption {
   powerConsumption: number;
 }
 
-export function countBits(report: string[]): PowerConsumption {
+export function countBits(report: string[]): BitCounts {
   const result: BitCounts = {};
 
   report.forEach((reading: string) => {
@@ -32,6 +32,12 @@ export function countBits(report: string[]): PowerConsumption {
       }
     });
   });
+
+  return result;
+}
+
+export function calculatePowerConsumption(report: string[]): PowerConsumption {
+  const result = countBits(report);
 
   // NOT ~ : ~ 10101         => 01010
   // XOR ^ :   10101 ^ 11111 => 01010
@@ -54,6 +60,32 @@ export function countBits(report: string[]): PowerConsumption {
   return powerConsumption;
 }
 
+export function mostCommonBit(
+  count: BitCount,
+  defaultBit: string = "1"
+): string {
+  if (count[0] < count[1]) {
+    return "1";
+  } else if (count[0] === count[1]) {
+    return defaultBit;
+  } else {
+    return "0";
+  }
+}
+
+export function leastCommonBit(
+  count: BitCount,
+  defaultBit: string = "0"
+): string {
+  if (count[0] < count[1]) {
+    return "0";
+  } else if (count[0] === count[1]) {
+    return defaultBit;
+  } else {
+    return "1";
+  }
+}
+
 export function processBitCount(bitCount: BitCounts) {
   let result = "";
 
@@ -62,12 +94,80 @@ export function processBitCount(bitCount: BitCounts) {
   keys.forEach((key) => {
     const count: BitCount = bitCount[parseInt(key, 10)];
 
-    if (count[0] < count[1]) {
-      result += "1";
-    } else {
-      result += "0";
-    }
+    result += mostCommonBit(count);
   });
 
   return result;
+}
+
+interface SplitResult {
+  found: string[];
+  other: string[];
+}
+
+export function findOxygenRating(diagnosticReport: string[]): number {
+  const found: string = findValue(Rating.OXYGEN, 0, diagnosticReport);
+  return parseInt(found, 2);
+}
+export function findCO2Rating(diagnosticReport: string[]): number {
+  const found = findValue(Rating.CO2, 0, diagnosticReport);
+  return parseInt(found, 2);
+}
+
+export function findLifeSupportRating(diagnosticReport: string[]): number {
+  return findCO2Rating(diagnosticReport) * findOxygenRating(diagnosticReport);
+}
+
+enum Rating {
+  OXYGEN,
+  CO2,
+}
+
+export function findValuesWithBitForIndex(
+  diagnosticReport: string[],
+  bitIndexToLookAt: number,
+  bitOfInterest: string
+): SplitResult {
+  return diagnosticReport.reduce(
+    (acc: SplitResult, current: string) => {
+      if (current[bitIndexToLookAt] === bitOfInterest) {
+        return { ...acc, found: [...acc.found, current] };
+      } else {
+        return { ...acc, other: [...acc.other, current] };
+      }
+    },
+    {
+      found: [],
+      other: [],
+    } as SplitResult
+  );
+}
+
+export function findValue(
+  ratingToFind: Rating,
+  currentBitIndex: number,
+  diagnosticReport: string[]
+): string {
+  const bitCounts: BitCounts = countBits(diagnosticReport);
+  const bitCount: BitCount = bitCounts[currentBitIndex];
+
+  let bitOfInterest: string;
+
+  if (ratingToFind === Rating.OXYGEN) {
+    bitOfInterest = mostCommonBit(bitCount);
+  } else {
+    bitOfInterest = leastCommonBit(bitCount);
+  }
+
+  const { found } = findValuesWithBitForIndex(
+    diagnosticReport,
+    currentBitIndex,
+    bitOfInterest
+  );
+
+  if (found.length === 1) {
+    return found[0];
+  } else {
+    return findValue(ratingToFind, currentBitIndex + 1, found);
+  }
 }
