@@ -23,7 +23,49 @@ export class Game {
     this.drawings = drawings;
   }
 
-  play() {
+  playUntilSingleBoardLeft() {
+    let currentDrawingIndex = 0;
+    let currentDrawing: number = this.drawings[currentDrawingIndex];
+
+    let numberOfBoardsThatHaveWon: number = 0;
+
+    let finalScore = 0;
+
+    while (
+      numberOfBoardsThatHaveWon < this.boards.length ||
+      currentDrawingIndex < this.drawings.length - 1
+    ) {
+      currentDrawing = this.drawings[currentDrawingIndex];
+
+      this.boards.forEach((board) => {
+        if (!board.alreadyWon) {
+          board.addDrawing(currentDrawing);
+          const won = board.hasWon();
+
+          if (won) {
+            numberOfBoardsThatHaveWon += 1;
+            board.place = numberOfBoardsThatHaveWon;
+          }
+        }
+      });
+      currentDrawingIndex += 1;
+    }
+
+    const lastBoardToWin =
+      this.boards.find((board) => board.place === this.boards.length) ||
+      "Not found";
+
+    if (lastBoardToWin === "Not found") {
+      console.log("error, could not find last board");
+      return "error";
+    } else {
+      finalScore = lastBoardToWin.getScore();
+    }
+
+    return finalScore;
+  }
+
+  playUntilWon() {
     let currentDrawingIndex = 0;
     let currentDrawing: number = this.drawings[currentDrawingIndex];
 
@@ -37,19 +79,14 @@ export class Game {
         const won = board.hasWon();
 
         if (won) {
-          // console.log("Board won!");
-          // console.log("Winning board");
-          // board.print();
           this.someoneWon = true;
           finalScore = board.getScore();
-          // console.log("score:", finalScore);
         }
       });
 
       currentDrawingIndex += 1;
     }
 
-    // this.boards.forEach((board) => board.print());
     return finalScore;
   }
 }
@@ -58,11 +95,15 @@ export class Board {
   grid: number[][];
   index: BoardIndex;
   drawings: number[];
+  alreadyWon: boolean;
+  place: number | null; // 1 if the first board to win
 
   constructor(grid: number[][]) {
     this.grid = grid;
     this.index = this.createIndex();
     this.drawings = [];
+    this.alreadyWon = false;
+    this.place = null;
   }
 
   getScore() {
@@ -70,6 +111,7 @@ export class Board {
 
     let sumOfMarked = 0;
 
+    // Tried to use reduce here, but couldn't figure out the typing
     Object.keys(this.index).forEach((currentKey: string) => {
       const currentNum: number = parseInt(currentKey, 10);
       const marked: boolean = this.index[currentNum].marked;
@@ -78,7 +120,6 @@ export class Board {
         sumOfMarked += currentNum;
       }
     });
-    // console.log({ lastDrawing, sumOfMarked });
 
     return lastDrawing * sumOfMarked;
   }
@@ -97,6 +138,7 @@ export class Board {
     });
 
     if (aRowIsFilled) {
+      this.alreadyWon = true;
       return true;
     }
 
@@ -104,6 +146,10 @@ export class Board {
       const colFilled = this.isColFilled(colIndex);
       return colFilled;
     });
+
+    if (aColIsFilled) {
+      this.alreadyWon = true;
+    }
 
     return aColIsFilled;
   }
