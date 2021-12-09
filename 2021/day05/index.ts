@@ -24,4 +24,8 @@ export function parseLines(fileName: string): Line[] {
   });
 }
 
-export function part2() {}
+export function horizontalAndVerticalFilter(lines: Line[]) {
+  return lines.filter((line) => {
+    return line.start.x === line.end.x || line.start.y === line.end.y;
+  });
+}
