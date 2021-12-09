@@ -7,7 +7,7 @@ export function part1() {}
 
 export function part2() {}
 
-export function parseFile(filename) {
+export function parseFile(filename: string) {
   let data;
   let rows;
 

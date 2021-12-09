@@ -6,7 +6,7 @@
   "scripts": {
     "build": "tsc",
     "dev": "tsc --watch --preserveWatchOutput",
-    "test": "node --experimental-vm-modules node_modules/.bin/jest 2021",
+    "test": "node --experimental-vm-modules node_modules/.bin/jest",
     "test:all": "node --experimental-vm-modules node_modules/.bin/jest",
     "format": "prettier --write \"./**/*.{ts,js}\"",
     "format:check": "prettier --check \"./**/*.{ts,js}\""
