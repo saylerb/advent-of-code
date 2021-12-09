@@ -1,4 +1,3 @@
-import { createExternalModuleExport } from "typescript";
 import { parseFile } from "./parseFile";
 
 interface Point {
@@ -15,15 +14,11 @@ export function parseLines(fileName: string): Line[] {
   const rawRows = parseFile(fileName);
 
   return rawRows.map((rawRow) => {
-    const [rawStart, rawEnd] = rawRow.split(/\s+->\s+/);
-
-    const [startX, startY] = rawStart
-      .split(",")
-      .map((raw) => parseInt(raw, 10));
-    const [endX, endY] = rawEnd.split(",").map((raw) => parseInt(raw, 10));
-
-    const start: Point = { x: startX, y: startY };
-    const end: Point = { x: endX, y: endY };
+    const [start, end] = rawRow
+      .split(/\s+->\s+/)
+      .map((rawCoords: string) => rawCoords.split(","))
+      .map((coord: string[]) => coord.map((x: string) => parseInt(x, 10)))
+      .map(([x, y]) => ({ x, y }));
 
     return { start, end };
   });
