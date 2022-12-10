@@ -6,6 +6,46 @@ import (
 	"os"
 )
 
+type Shape int // Rock, Paper, Scissors: 0,1,2
+
+func (s Shape) Points() int {
+	// rock - 1 point
+	// paper - 2 points
+	// scissors - 3 points
+
+	return int(s) + 1
+}
+
+func AtoShape(letter string) Shape {
+	mapping := map[string]int{
+		"A": 0,
+		"X": 0,
+		"B": 1,
+		"Y": 1,
+		"C": 2,
+		"Z": 2,
+	}
+
+	return Shape(mapping[letter])
+}
+
+func CalculatePoints(opp Shape, me Shape) int {
+	outcomePoints := 0
+	if opp == me {
+		//draw
+		outcomePoints += 3
+	} else if (opp+1)%3 == me {
+		// I wins, since num is one more than opp
+		outcomePoints += 6
+	} else {
+		// I lose
+		outcomePoints += 0
+	}
+	shapePoints := me.Points()
+
+	return outcomePoints + shapePoints
+}
+
 func SolvePart2(input []string) int {
 	sum := 0
 	for _, round := range input {
@@ -62,50 +102,12 @@ func SolvePart2(input []string) int {
 
 func SolvePart1(input []string) int {
 	sum := 0
-	// rock AX beats CZ
-	// paper BY beats AX
-	// scissor CZ beats BY
 
 	for _, round := range input {
-		me := round[2:]
-		opp := round[:1]
+		me := AtoShape(round[2:])
+		opp := AtoShape(round[:1])
 
-		//fmt.Printf("opp: %q, me: %q", opp, me)
-
-		if me == "X" {
-			sum += 1
-			if opp == "B" {
-				// loss
-				sum += 0
-			} else if opp == "C" {
-				// win
-				sum += 6
-			} else {
-				sum += 3
-			}
-		} else if me == "Y" {
-			sum += 2
-			if opp == "C" {
-				//loss
-				sum += 0
-			} else if opp == "A" {
-				// win
-				sum += 6
-			} else {
-				sum += 3
-			}
-		} else if me == "Z" {
-			sum += 3
-			if opp == "A" {
-				// loss
-				sum += 0
-			} else if opp == "B" {
-				// win
-				sum += 6
-			} else {
-				sum += 3
-			}
-		}
+		sum += CalculatePoints(opp, me)
 	}
 
 	return sum
