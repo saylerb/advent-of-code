@@ -6,7 +6,61 @@ import (
 	"os"
 )
 
-func Solve(input []string) int {
+func SolvePart2(input []string) int {
+	sum := 0
+	for _, round := range input {
+		me := round[2:]
+		opp := round[:1]
+		// rock (AX) beats scisors (CZ) (rock - 1 point)
+		// scissor (CZ) beats paper (BY) (scissors - 3 points)
+		// paper (BY) beats rock (AX) (paper - 2 points)
+
+		if me == "X" {
+			// want loss
+			sum += 0
+			if opp == "A" {
+				// choose scissors to lose
+				sum += 3
+			} else if opp == "C" {
+				// choose paper to lose
+				sum += 2
+			} else if opp == "B" {
+				// choose rock to lose
+				sum += 1
+			}
+		} else if me == "Y" {
+			// want draw
+			sum += 3
+			if opp == "A" {
+				// choose rock to draw
+				sum += 1
+			} else if opp == "B" {
+				// choose paper to draw
+				sum += 2
+			} else if opp == "C" {
+				// choose scissors to draw
+				sum += 3
+			}
+		} else if me == "Z" {
+			// want win
+			sum += 6
+			if opp == "A" {
+				// choose paper to win
+				sum += 2
+			} else if opp == "B" {
+				// choose scissors to win
+				sum += 3
+			} else if opp == "C" {
+				// choose rock to win
+				sum += 1
+			}
+		}
+	}
+
+	return sum
+}
+
+func SolvePart1(input []string) int {
 	sum := 0
 	// rock AX beats CZ
 	// paper BY beats AX

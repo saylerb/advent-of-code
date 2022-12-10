@@ -8,7 +8,9 @@ import (
 func main() {
 	input := solution.ScanIntoSlice("input.txt")
 
-	res := solution.Solve(input)
+	one := solution.SolvePart1(input)
+	two := solution.SolvePart2(input)
 
-	fmt.Println("sum: ", res)
+	fmt.Println("one: ", one)
+	fmt.Println("two: ", two)
 }
