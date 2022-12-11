@@ -8,11 +8,16 @@ import (
 
 type Shape int // Rock, Paper, Scissors: 0,1,2
 
+type Outcome string
+
+var Loss Outcome = "X"
+var Draw Outcome = "Y"
+var Win Outcome = "Z"
+
 func (s Shape) Points() int {
 	// rock - 1 point
 	// paper - 2 points
 	// scissors - 3 points
-
 	return int(s) + 1
 }
 
@@ -27,6 +32,10 @@ func AtoShape(letter string) Shape {
 	}
 
 	return Shape(mapping[letter])
+}
+
+func AtoOutcome(letter string) Outcome {
+	return Outcome(letter)
 }
 
 func CalculatePoints(opp Shape, me Shape) int {
@@ -49,48 +58,43 @@ func CalculatePoints(opp Shape, me Shape) int {
 func SolvePart2(input []string) int {
 	sum := 0
 	for _, round := range input {
-		me := round[2:]
-		opp := round[:1]
-		// rock (AX) beats scisors (CZ) (rock - 1 point)
-		// scissor (CZ) beats paper (BY) (scissors - 3 points)
-		// paper (BY) beats rock (AX) (paper - 2 points)
+		outcomeNeeded := AtoOutcome(round[2:])
+		opp := AtoShape(round[:1])
 
-		if me == "X" {
-			// want loss
-			sum += 0
-			if opp == "A" {
+		if outcomeNeeded == Loss {
+			if opp == Shape(0) {
 				// choose scissors to lose
 				sum += 3
-			} else if opp == "C" {
+			} else if opp == Shape(2) {
 				// choose paper to lose
 				sum += 2
-			} else if opp == "B" {
+			} else if opp == Shape(1) {
 				// choose rock to lose
 				sum += 1
 			}
-		} else if me == "Y" {
+		} else if outcomeNeeded == Draw {
 			// want draw
 			sum += 3
-			if opp == "A" {
+			if opp == Shape(0) {
 				// choose rock to draw
 				sum += 1
-			} else if opp == "B" {
+			} else if opp == Shape(1) {
 				// choose paper to draw
 				sum += 2
-			} else if opp == "C" {
+			} else if opp == Shape(2) {
 				// choose scissors to draw
 				sum += 3
 			}
-		} else if me == "Z" {
+		} else if outcomeNeeded == Win {
 			// want win
 			sum += 6
-			if opp == "A" {
+			if opp == Shape(0) {
 				// choose paper to win
 				sum += 2
-			} else if opp == "B" {
+			} else if opp == Shape(1) {
 				// choose scissors to win
 				sum += 3
-			} else if opp == "C" {
+			} else if opp == Shape(2) {
 				// choose rock to win
 				sum += 1
 			}

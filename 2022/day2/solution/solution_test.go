@@ -5,6 +5,27 @@ import (
 	"testing"
 )
 
+func TestAtoOutcome(t *testing.T) {
+	// not a super valuable test, since type definitions for outcome are just
+	// strings but, a good way to learn writing a table-driven test
+	outcomeTests := []struct {
+		from string
+		want Outcome
+	}{
+		{"X", Loss},
+		{"Y", Draw},
+		{"Z", Win},
+	}
+
+	for _, test := range outcomeTests {
+		got := AtoOutcome(test.from)
+
+		if got != test.want {
+			t.Errorf("got %v, wanted %v", got, test.want)
+		}
+	}
+}
+
 func TestMapLetterToShape(t *testing.T) {
 	assertShape(t, AtoShape("A"), Shape(0))
 	assertShape(t, AtoShape("B"), Shape(1))
