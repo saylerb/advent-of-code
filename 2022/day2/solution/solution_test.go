@@ -27,19 +27,19 @@ func TestAtoOutcome(t *testing.T) {
 }
 
 func TestMapLetterToShape(t *testing.T) {
-	assertShape(t, AtoShape("A"), Shape(0))
-	assertShape(t, AtoShape("B"), Shape(1))
-	assertShape(t, AtoShape("C"), Shape(2))
+	assertShape(t, AtoShape("A"), Rock)
+	assertShape(t, AtoShape("B"), Paper)
+	assertShape(t, AtoShape("C"), Scissors)
 
-	assertShape(t, AtoShape("X"), Shape(0))
-	assertShape(t, AtoShape("Y"), Shape(1))
-	assertShape(t, AtoShape("Z"), Shape(2))
+	assertShape(t, AtoShape("X"), Rock)
+	assertShape(t, AtoShape("Y"), Paper)
+	assertShape(t, AtoShape("Z"), Scissors)
 }
 
 func TestGamePoints(t *testing.T) {
 	t.Run("draw when both choose rock", func(t *testing.T) {
-		opp := Shape(0)
-		me := Shape(0)
+		opp := Rock
+		me := Rock
 
 		got := CalculatePoints(opp, me)
 		want := 3 + 1
@@ -47,8 +47,8 @@ func TestGamePoints(t *testing.T) {
 		assertPoints(t, got, want)
 	})
 	t.Run("I win choosing paper and opp chooses rock", func(t *testing.T) {
-		opp := Shape(0)
-		me := Shape(1)
+		opp := Rock
+		me := Paper
 
 		got := CalculatePoints(opp, me)
 		want := 2 + 6
@@ -56,8 +56,8 @@ func TestGamePoints(t *testing.T) {
 		assertPoints(t, got, want)
 	})
 	t.Run("I win choosing rock and opp chooses scissors", func(t *testing.T) {
-		opp := Shape(2)
-		me := Shape(0)
+		opp := Scissors
+		me := Rock
 
 		got := CalculatePoints(opp, me)
 		want := 1 + 6
