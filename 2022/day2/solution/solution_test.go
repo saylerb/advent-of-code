@@ -5,9 +5,33 @@ import (
 	"testing"
 )
 
+func TestModulo(t *testing.T) {
+	got := (-1%3 + 3) % 3
+	want := 2
+	if got != want {
+		t.Errorf("got %v, wanted %v", got, want)
+	}
+}
+
+func TestShapeForOutcome(t *testing.T) {
+	assertShape(t, ShapeForOutcome(Loss, Rock), Scissors)
+	assertShape(t, ShapeForOutcome(Draw, Rock), Rock)
+	assertShape(t, ShapeForOutcome(Win, Rock), Paper)
+}
+
+func TestGetMyOutcome(t *testing.T) {
+	assertOutcome(t, getMyOutcome(Rock, Rock), Draw)
+	assertOutcome(t, getMyOutcome(Rock, Scissors), Loss)
+	assertOutcome(t, getMyOutcome(Rock, Paper), Win)
+	assertOutcome(t, getMyOutcome(Paper, Rock), Loss)
+	assertOutcome(t, getMyOutcome(Scissors, Rock), Win)
+	assertOutcome(t, getMyOutcome(Scissors, Paper), Loss)
+}
+
 func TestAtoOutcome(t *testing.T) {
-	// not a super valuable test, since type definitions for outcome are just
-	// strings but, a good way to learn writing a table-driven test
+	// not a super valuable test,
+	// (just testing the hardcoded string values
+	// but, a good way to learn writing a table-driven test
 	outcomeTests := []struct {
 		from string
 		want Outcome
@@ -36,49 +60,8 @@ func TestMapLetterToShape(t *testing.T) {
 	assertShape(t, AtoShape("Z"), Scissors)
 }
 
-func TestGamePoints(t *testing.T) {
-	t.Run("draw when both choose rock", func(t *testing.T) {
-		opp := Rock
-		me := Rock
-
-		got := CalculatePoints(opp, me)
-		want := 3 + 1
-
-		assertPoints(t, got, want)
-	})
-	t.Run("I win choosing paper and opp chooses rock", func(t *testing.T) {
-		opp := Rock
-		me := Paper
-
-		got := CalculatePoints(opp, me)
-		want := 2 + 6
-
-		assertPoints(t, got, want)
-	})
-	t.Run("I win choosing rock and opp chooses scissors", func(t *testing.T) {
-		opp := Scissors
-		me := Rock
-
-		got := CalculatePoints(opp, me)
-		want := 1 + 6
-
-		assertPoints(t, got, want)
-	})
-}
-
 func TestSolutionPart1(t *testing.T) {
 	t.Run("second column indicates shape played by me", func(t *testing.T) {
-		input := []string{"A Y", "B X", "C Z"}
-
-		got := SolvePart1(input)
-		want := 15
-
-		if got != want {
-			t.Errorf("got %v, wanted %v", got, want)
-		}
-	})
-
-	t.Run("", func(t *testing.T) {
 		input := []string{"A Y", "B X", "C Z"}
 
 		got := SolvePart1(input)
@@ -133,6 +116,13 @@ func assertShape(t *testing.T, got, want Shape) {
 }
 
 func assertPoints(t *testing.T, got, want int) {
+	t.Helper()
+	if got != want {
+		t.Errorf("got %v, wanted %v", got, want)
+	}
+}
+
+func assertOutcome(t *testing.T, got, want Outcome) {
 	t.Helper()
 	if got != want {
 		t.Errorf("got %v, wanted %v", got, want)

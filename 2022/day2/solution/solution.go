@@ -20,6 +20,11 @@ func (s Shape) Points() int {
 	// scissors - 3 points
 	return int(s) + 1
 }
+
+func (s Shape) String() string {
+	return []string{"Rock", "Paper", "Scissors"}[s]
+}
+
 func AtoShape(letter string) Shape {
 	mapping := map[string]Shape{
 		"A": Rock,
@@ -33,78 +38,73 @@ func AtoShape(letter string) Shape {
 }
 
 func AtoOutcome(letter string) Outcome {
-	return Outcome(letter)
+	switch letter {
+	case "X":
+		return Loss
+	case "Y":
+		return Draw
+	case "Z":
+		return Win
+	default:
+		panic("invalid input")
+	}
 }
 
-type Outcome string
+type Outcome int
 
-var Loss Outcome = "X"
-var Draw Outcome = "Y"
-var Win Outcome = "Z"
+const (
+	Loss Outcome = 0
+	Draw Outcome = 3
+	Win  Outcome = 6
+)
 
-func CalculatePoints(opp Shape, me Shape) int {
-	outcomePoints := 0
-	if opp == me {
-		//draw
-		outcomePoints += 3
-	} else if (opp+1)%3 == me {
-		// I wins, since num is one more than opp
-		outcomePoints += 6
-	} else {
-		// I lose
-		outcomePoints += 0
+func (o Outcome) Points() int {
+	return int(o)
+}
+
+func (o Outcome) String() string {
+	return []string{"Loss", "Draw", "Win"}[o/3]
+
+}
+
+func ShapeForOutcome(desired Outcome, opponent Shape) Shape {
+	switch desired {
+	case Loss:
+		return Shape(opponent+3-1) % 3
+	case Draw:
+		return opponent
+	case Win:
+		return Shape(opponent+3+1) % 3
+	default:
+		panic("invalid input")
 	}
-	shapePoints := me.Points()
+}
 
-	return outcomePoints + shapePoints
+func getMyOutcome(opp Shape, me Shape) Outcome {
+	// golang modulus returns the 'least negative remainder'
+	// but I want the 'least positive remainder'
+	switch (((opp - me) % 3) + 3) % 3 {
+	case 0:
+		return Draw
+	case 1:
+		return Loss
+	case 2:
+		return Win
+	default:
+		panic("something went wrong")
+	}
 }
 
 func SolvePart2(input []string) int {
 	sum := 0
+
 	for _, round := range input {
 		outcomeNeeded := AtoOutcome(round[2:])
 		opp := AtoShape(round[:1])
+		me := ShapeForOutcome(outcomeNeeded, opp)
 
-		if outcomeNeeded == Loss {
-			if opp == Rock {
-				// (0 + 3 - 1) % 3 = 2
-				// choose scissors to lose
-			} else if opp == Scissors {
-				// (2 + 3 - 1) % 3 = 1
-				// choose paper to lose
-				sum += 2
-			} else if opp == Paper {
-				// (1 + 3 - 1) % 3 = 0
-				// choose rock to lose
-				sum += 1
-			}
-		} else if outcomeNeeded == Draw {
-			// want draw
-			sum += 3
-			if opp == Rock {
-				// choose rock to draw
-				sum += 1
-			} else if opp == Paper {
-				// choose paper to draw
-				sum += 2
-			} else if opp == Scissors {
-				// choose scissors to draw
-				sum += 3
-			}
-		} else if outcomeNeeded == Win {
-			// want win
-			sum += 6
-			if opp == Rock {
-				// choose paper to win
-				sum += 2
-			} else if opp == Paper {
-				// choose scissors to win
-				sum += 3
-			} else if opp == Scissors {
-				// choose rock to win
-				sum += 1
-			}
-		}
+		sum += outcomeNeeded.Points()
+		sum += me.Points()
 	}
 
 	return sum
@@ -117,7 +117,10 @@ func SolvePart1(input []string) int {
 		me := AtoShape(round[2:])
 		opp := AtoShape(round[:1])
 
-		sum += CalculatePoints(opp, me)
+		outcome := getMyOutcome(opp, me)
+
+		sum += outcome.Points()
+		sum += me.Points()
 	}
 
 	return sum
