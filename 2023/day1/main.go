@@ -6,7 +6,9 @@ import (
 )
 
 func main() {
-	input := trebuchet.Solution("input.txt")
+	one := trebuchet.Solution("input.txt")
+	two := trebuchet.SolutionTwo("input.txt")
 
-	fmt.Println("input: ", input)
+	fmt.Println("part one solution: ", one)
+	fmt.Println("part two solution: ", two)
 }
