@@ -43,7 +43,8 @@ type Digit struct {
 
 func convertToDigits(str string) string {
 	digits := []Digit{}
-	numbers := []string{"zero", "one", "two", "three", "four", "five", "six", "seven", "eight", "nine", "0", "1", "2", "3", "4", "5", "6", "7", "8", "9"}
+	numbers := []string{"zero", "one", "two", "three", "four", "five",
+		"six", "seven", "eight", "nine", "0", "1", "2", "3", "4", "5", "6", "7", "8", "9"}
 
 	for i, number := range numbers {
 
@@ -58,7 +59,9 @@ func convertToDigits(str string) string {
 			}
 		}
 	}
-	sort.Slice(digits, func(i, j int) bool { return digits[i].startIndex < digits[j].startIndex })
+	sort.Slice(digits, func(i, j int) bool {
+		return digits[i].startIndex < digits[j].startIndex
+	})
 
 	result := ""
 	for _, digit := range digits {
